@@ -1,7 +1,7 @@
 <?php
 //Définition deck
-require_once('card.php');
 
+namespace Models;
   class Deck{
   
 
@@ -14,8 +14,7 @@ require_once('card.php');
     {
       $tmp['card'] = array_rand($this->number);
       $tmp['type'] = $this->type[array_rand($this->type)];
-      $tmp['deck']=array_rand($this->nmb_deck);
-
+      $tmp['deck'] = array_rand($this->nmb_deck);
       while(in_array($tmp['card'].$tmp['type'].$tmp['deck'], $_SESSION['used_cards']))
       {
         $tmp['card'] = array_rand($this->number);

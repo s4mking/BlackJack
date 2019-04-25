@@ -1,18 +1,12 @@
 <?php
-require("../models/deck.php");
 require_once("../src/autoload.php");
-session_start();
 
+session_start();
 
 $controller_query = $_GET["controller"] ?? "index";
 $action = $_GET["action"] ?? "home";
-
 $controllerName = 
               "\Controllers\\".
               ucfirst($controller_query)."Controller";
-
-$mydeck = new Deck();
-
-
-
-var_dump($mydeck->pullCard());
+$controller = new $controllerName;
+$controller->$action();

@@ -1,13 +1,16 @@
 <?php
+namespace Models;
+
+
 // Définition d'un utilisateur
 class Player{
   
-  var $name;
+  public $name;
   var $mise;
-  var $money;
+  public $money;
   var $arrayCardPlay = array();
 
-  function __construct( $name,$money ) {
+  public function __construct( $name,$money=100 ) {
     $this->name = $name;
     $this->money = $money;
  }
