@@ -7,13 +7,22 @@ namespace Models;
     private $status = "initial";
     private $players = [];
     
-    public function start(){
-      $this->status = "started";
-    }
+    
+
+    function setStatus($status){
+      $this->status = $status;
+   }
+
+   public function start(){
+    $this->status = "started";
+  }
+  
 
     public function getPlayers(){
       return $this->players;
     }
+    
+
     public function addPlayer(Player $player){
       if($this->status != "initial")
       throw new Exception("Le jeu a déjà commencé!!!");
@@ -26,10 +35,6 @@ namespace Models;
       $testsam = array();
       $testsam = $mydecks->pullCard();
        $card_array = $element->arrayCardPlay;
-        // var_dump($element->arrayCardPlay);
-        ?><br><?php
-        // var_dump($testsam);
-        ?><br><?php
        array_push($element->arrayCardPlay,$testsam);
     }
    
@@ -44,45 +49,42 @@ namespace Models;
 
     public function save(){
       return [
-        "players" => $this->players,
-        "moneys" => $this->moneys
+        "status"=> $this->status,
+        "players" => $this->players
       ];
     }
     public function load($saved_game){
+      $this->status = $saved_game["status"];
       $this->players = $saved_game["players"];
-      $this->moneys = $saved_game["moneys"];
     }
    
-    function calcCards($cards)
-    {
-      global $cards;
-      $sum = 0;
-      $aces = 0;
-      
-      foreach($cards as $card)
-      {
-          if($card['card'] != "A")
-          {
-            $sum += $cards[$card['card']];
-          }
-          else
-          {
-            $aces++;
-          }
-      }
-      
-      for($i=0; $i<$aces; $i++)
-      {
-        if($sum+11 > 21)
-        {
-          $sum += 1;
-        }
-        else
-        {
-          $sum+= 11;
-        }
-      }
-      
-      return $sum;
-    }
+    
+  
+  function checkWinner($player, $computer)
+{	
+	global $winner;
+	if($winner != true)
+	{
+		if(calcCards($player) == 21 && calcCards($computer) == 21)
+		{
+			print notification("Tie game");
+			$winner = true;
+		}
+		elseif(calcCards($player) > 21 || calcCards($computer) == 21)
+		{
+			print notification("You lost, the computer won");
+			$winner = true;
+		}
+		elseif(calcCards($computer) > 21 || calcCards($player) == 21)
+		{
+			print notification("You won, the computer lost");
+			$winner = true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+}
+
   }

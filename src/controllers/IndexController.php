@@ -15,7 +15,9 @@ class IndexController{
     }
     public function home(){
       $board = $this->getBoard();
+      
       if($board->getStatus() == "initial"){
+        $allPlayers = $board->getPlayers;
         include("../views/index/initial.php");
       }else{
         include("../views/index/game.php");

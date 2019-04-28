@@ -19,21 +19,41 @@ class PlayController{
     );
     $board->addPlayer($player);
     $_SESSION["saved_game"] = $board->save();
-    header("Location: /www/index.php"); exit;
+    header("Location: /"); exit;
+  }
+  function reinit(){
+    $board = $this->getBoard();
+    $board->reinit();
+    header("Location: /"); exit;
   }
   function start_game(){
+    // die('totot');
     $board = $this->getBoard();
     $_SESSION['used_cards']=array();
     //Ici on va fournir les mains de départ + ajout de l'utilisateur croupier
     $croupier = new \Models\Player("Croupier");
     $board->addPlayer($croupier);
-    
     $list_player = $board->getPlayers();
+    
     foreach($list_player as $element){
+      if($element->name == "Croupier"){
+        $board->drawCard($element);
+      }else{
+        $board->drawCard($element);
       $board->drawCard($element);
-      $board->drawCard($element);
+      }
+      
     }
-      var_dump($list_player);
     $board->start();
+    // var_dump($board);
+    $_SESSION["saved_game"] = $board->save();
+    header("Location: /"); exit;
+    
+    // header("Location: /www/index.php"); exit;
+  }
+
+  //ici on va avoir l'ction du joueur plus vérification dans un second temps
+  function drawCard(){
+
   }
 }
