@@ -5,20 +5,24 @@ namespace Models;
 // Définition d'un utilisateur
 class Player{
   
+  public $id;
   public $name;
   var $mise;
   public $money;
   var $arrayCardPlay = array();
 
-  public function __construct( $name,$money=100 ) {
+  public function __construct( $name,$id,$money=100 ) {
     $this->name = $name;
-    $this->money = $money;
+    $this->money = 100;
+    $this->id=$id;
  }
 
   function setMise($mise){
    $this->mise = $mise;
 }
-
+public function getId(){
+  return $this->id;
+}
 public function getCards(){
     return $this->arrayCardPlay;
   }
@@ -33,10 +37,14 @@ public function getCards(){
     
     foreach($cards as $card)
     {
-      
+     
         if($card['card'] != "A")
         {
-          $sum += $card['card'];
+          if(is_string($card['card'])){
+            $sum += 10;
+          }else{
+            $sum += $card['card'];
+          }
         }
         else
         {

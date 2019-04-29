@@ -3,31 +3,47 @@
 namespace Models;
   class Game{
 
-    private $moneys = [];
     private $status = "initial";
     private $players = [];
-    
+    private $actual_player=0;
     
 
     function setStatus($status){
       $this->status = $status;
    }
+   function setActual_player($actual_player){
+    $this->actual_player = $actual_player;
+ }
 
    public function start(){
     $this->status = "started";
+    $this->setActual_player(0);
   }
   
-
+    public function getActual_player(){
+      return $this->actual_player;
+    }
     public function getPlayers(){
       return $this->players;
     }
     
-
-    public function addPlayer(Player $player){
+    public function getPlayerById($idPlayer){
+      foreach($this->getPlayers() as $player){
+        if($player->id == $idPlayer){
+          return $player;
+        }
+      }
+    }
+    public function addPlayer($name){
       if($this->status != "initial")
       throw new Exception("Le jeu a déjà commencé!!!");
+       $player = new  \Models\Player(
+        $name,
+        $this->getActual_player()
+      );
       $this->players[$player->name] = $player;
-      $this->moneys[$player->money] = 100;
+      // $this->players[$player->id]= 0;
+      $this->setActual_player($this->actual_player + 1);
     }
    
     public function drawCard($element){
@@ -50,11 +66,13 @@ namespace Models;
     public function save(){
       return [
         "status"=> $this->status,
+        "actual_player"=> $this->actual_player,
         "players" => $this->players
       ];
     }
     public function load($saved_game){
       $this->status = $saved_game["status"];
+      $this->actual_player = $saved_game["actual_player"];
       $this->players = $saved_game["players"];
     }
    

@@ -6,10 +6,10 @@
   <h3>Liste des joueurs</h3>
   <ul>
     <?php foreach($board->getPlayers() as $player):?>
+    <?php var_dump($player);?>
       <li>
         <?php echo $player->name; ?>
         (<?php echo $player->money; ?> $)
-        
       </li>
     <?php endforeach;?>
   </ul>
@@ -18,11 +18,9 @@
 <?php endif;?>
 
 <h3>Ajouter un joueur</h3>
-
 <form method="post" action="?controller=play&action=new_player">
   <input type="text" name="player_name">
   <button type="submit">Ajouter</button>
-
 </form>
 
 <h3>Prêt ?</h3>
