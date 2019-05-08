@@ -6,9 +6,9 @@ namespace Models;
     private $status = "initial";
     private $players = [];
     private $actual_player=0;
-    
 
-    function setStatus($status){
+
+   function setStatus($status){
       $this->status = $status;
    }
    function setActual_player($actual_player){
@@ -19,6 +19,10 @@ namespace Models;
     $this->status = "started";
     $this->setActual_player(0);
   }
+  public function bet(){
+    $this->status = "bet";
+    $this->setActual_player(0);
+  }
   
     public function getActual_player(){
       return $this->actual_player;
@@ -26,7 +30,7 @@ namespace Models;
     public function getPlayers(){
       return $this->players;
     }
-    
+   
     public function getPlayerById($idPlayer){
       foreach($this->getPlayers() as $player){
         if($player->id == $idPlayer){
@@ -34,9 +38,17 @@ namespace Models;
         }
       }
     }
+
+    public function getPlayerByName($namePlayer){
+      foreach($this->getPlayers() as $player){
+        if($player->name == $namePlayer){
+          return $player;
+        }
+      }
+    }
     public function addPlayer($name){
-      if($this->status != "initial")
-      throw new Exception("Le jeu a déjà commencé!!!");
+      // if($this->status != "initial")
+      // throw new Exception("Le jeu a déjà commencé!!!");
        $player = new  \Models\Player(
         $name,
         $this->getActual_player()
@@ -44,6 +56,20 @@ namespace Models;
       $this->players[$player->name] = $player;
       // $this->players[$player->id]= 0;
       $this->setActual_player($this->actual_player + 1);
+    }
+
+    public function deletePlayer($id){
+      $user = $this->getPlayerById($id);
+      
+      $listPlayers = $this->getPlayers();
+
+      foreach($listPlayers as $key=>$player){
+        if($player->id == $id){
+         $deletePlayer = $key;
+        }
+      }
+      unset(($this->players)[$deletePlayer]);
+      // var_dump($this);
     }
    
     public function drawCard($element){
@@ -74,35 +100,69 @@ namespace Models;
       $this->status = $saved_game["status"];
       $this->actual_player = $saved_game["actual_player"];
       $this->players = $saved_game["players"];
-    }
-   
     
-  
-  function checkWinner($player, $computer)
+    }
+
+    function checkCasino(){
+      if(($this->actual_player)+1 == sizeof($this->getPlayers())){
+        $casino = $this->getPlayerById($this->actual_player);
+        var_dump($this->actual_player);
+        
+          while($casino->calcCards() <= 16){
+            $this->drawCard($casino);
+          }
+      }
+    }
+
+    function checkCards($player)
 {	
-	global $winner;
-	if($winner != true)
-	{
-		if(calcCards($player) == 21 && calcCards($computer) == 21)
-		{
-			print notification("Tie game");
-			$winner = true;
+		if($player->calcCards() == 21)
+		{	
+      $this->setActual_player($this->actual_player + 1);
 		}
-		elseif(calcCards($player) > 21 || calcCards($computer) == 21)
+		elseif($player->calcCards() > 21)
 		{
-			print notification("You lost, the computer won");
-			$winner = true;
-		}
-		elseif(calcCards($computer) > 21 || calcCards($player) == 21)
-		{
-			print notification("You won, the computer lost");
-			$winner = true;
+      $this->setActual_player($this->actual_player + 1);
 		}
 		else
 		{
-			return false;
-		}
-	}
-}
+			
+    }
+    $this->checkCasino();
+
+}  
+
+  function winGame(){
+    //Calcul des mises
+    $listplayers = $this->getPlayers();
+    $casino_score = $this->getPlayerByName('Croupier')->calcCards();
+    foreach( $listplayers as $player){
+      $score = $player->calcCards();
+        if( $score == 21){
+          $mise = $player->getMise();
+          $actual_money = $player->getMoney();
+          $player->setMoney($actual_money + ($mise*2));
+        }
+        elseif(($casino_score < 21 && $score< 21 && $score>=$casino_score) || ($casino_score > 21 && $score> 21 && $score<=$casino_score)){
+          
+        }
+        else{
+          $mise = $player->getMise();
+          $actual_money = $player->getMoney();
+          $player->setMoney($actual_money - ($mise));
+        }
+    }
+
+
+    $this->setStatus("finish");
+  }
+  function relaunchGame(){
+    $listplayers = $this->getPlayers();
+    foreach($listplayers as $player){
+      $player->destroyCards();
+    }
+    $this->setActual_player(0);
+    $this->setStatus("initial"); 
+  }
 
   }

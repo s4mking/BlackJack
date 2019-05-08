@@ -8,8 +8,9 @@ class Player{
   public $id;
   public $name;
   var $mise;
-  public $money;
+  private $money;
   var $arrayCardPlay = array();
+  
 
   public function __construct( $name,$id,$money=100 ) {
     $this->name = $name;
@@ -20,14 +21,34 @@ class Player{
   function setMise($mise){
    $this->mise = $mise;
 }
+function getMise(){
+  return $this->mise;
+}
+function setMoney($money){
+  $this->money = $money;
+}
+
+function getMoney(){
+ return $this->money;
+}
+
 public function getId(){
   return $this->id;
 }
 public function getCards(){
     return $this->arrayCardPlay;
   }
-
-
+  function setCards($arrayCards){
+    $this->arrayCardPlay = $arrayCards;
+ }
+public function destroyCards(){
+    $this->setCards([]);
+    // foreach($listCards as $card){
+    //   unset($card);
+    // }
+    // $listCards=[];
+    
+}
   public function calcCards()
   {
 
@@ -67,16 +88,7 @@ public function getCards(){
     return $sum;
   }
 
-  function getMise(){
-    return $this->mise;
-}
-  function setMoney($money){
-    $this->money = $money;
-  }
-
-  function getMoney(){
-    return $this->money;
-}
+ 
  
  
 }

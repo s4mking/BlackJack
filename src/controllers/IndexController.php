@@ -15,13 +15,16 @@ class IndexController{
     }
     public function home(){
       $board = $this->getBoard();
+      
       if($board->getStatus() == "initial"){
         $allPlayers = $board->getPlayers();
         include("../views/index/initial.php");
       }else if($board->getStatus() == "bet"){
         include("../views/index/bets.php");
-      }else{
+      }else if($board->getStatus() == "started"){
         include("../views/index/game.php");
+      }else if($board->getStatus() == "finish"){
+        include("../views/index/result.php");
       }
     }
  
