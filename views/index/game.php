@@ -1,6 +1,8 @@
 <?php 
 include("../views/head.php");
+include("../views/errors.php");
 //  var_dump($board);
+$actual = $board->getActual_player();
 foreach($board->getPlayers() as $player){
   $cards = $player->getCards();
   $sum = $player->calcCards();
@@ -17,13 +19,25 @@ if($player->name == "Croupier"){
 foreach($board->getPlayers() as $player){
   $cards = $player->getCards();
   $sum = $player->calcCards();
-  if( $player->name != "Croupier"){
-    ?></div><h1><?php echo $player->name ?></h1><h2>Score : <?php echo($player->calcCards()); ?></h2><div class='actual_player'><?php
+  if( $player->name != "Croupier" && $player->id == $actual){
+    ?>
+   
+  </div><div class='player_turn'> <h3>Joueur actuel :</h3><h1><?php echo $player->name ?></h1><h2>Score : <?php echo($sum); ?></h2><div class='actual_player'><?php
     foreach($cards as $card){
       // echo($card['card'].$card['type']);
       ?>
              <div>
-               <img src="/cards/<?=$card['card'].$card['type']?>.gif" /><br>
+               <img src="assets/imgs/cards/<?=$card['card'].$card['type']?>.gif" /><br>
+               </div>
+     <?php } ?><br></div>
+     <?php
+  }else if($player->name != "Croupier"){
+    ?></div><h1><?php echo $player->name ?></h1><h2>Score : <?php echo($sum); ?></h2><div class='actual_player'><?php
+    foreach($cards as $card){
+      // echo($card['card'].$card['type']);
+      ?>
+             <div>
+               <img src="assets/imgs/cards/<?=$card['card'].$card['type']?>.gif" /><br>
                </div>
      <?php } ?><br>
      <?php
@@ -42,12 +56,12 @@ if( $board->getActual_player()+1 != sizeof($board->getPlayers())){
   <button class="btn btn-primary" type="submit">Piocher une carte</button>
 </form>
 <form method="post" action="/?controller=play&action=pass">
-  <button class="btn btn-primary" type="submit">Passer son tour</button>
+  <button class="btn btn-info" type="submit">Passer son tour</button>
 </form>
 </div>
 <?php }else{ ?>
   <form method="post" action="/?controller=play&action=win">
-  <button class="btn btn-primary" type="submit">Résultats</button>
+  <button class="btn btn-success" type="submit">Résultats</button>
 </form>
 <?php } ?>
 

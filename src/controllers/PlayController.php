@@ -15,14 +15,14 @@ class PlayController{
   function new_player(){
     $board = $this->getBoard();
     $list_player = $board->getPlayers();
-    if(sizeof($list_player)>=3){
-      die('Too much players....');
-    }else{
+    // if(sizeof($list_player)>=3){
+    //   //  die('Too much players....');
+    // }else{
       $name = $_POST["player_name"];
     $board->addPlayer($name);
     $_SESSION["saved_game"] = $board->save();
     header("Location: /"); exit;
-    }
+    // }
   }
   function delete_user(){
     $board = $this->getBoard();
@@ -54,13 +54,25 @@ class PlayController{
     $bet_num = $_POST["bet"];
     $all_players = $board->getPlayers();
     $actualPlayer = $board->getPlayerById($board->getActual_player());
+    $nextPlayer = $board->getPlayerById($board->getActual_player()+1);
     $actualPlayer->setMise($bet_num);
     $board->setActual_player($board->getActual_player() + 1);
     $_SESSION["saved_game"] = $board->save();
+    if($nextPlayer->name == 'Croupier'){
+      var_dump($board->getActual_player()+1 );
+      var_dump(sizeof($all_players));
+      if($board->getActual_player()+1 >= sizeof($all_players)){
+        $board->setActual_player($board->getActual_player() + 1);
+        }else{
+          $board->setActual_player(0);
+      $this->start_game();
+
+      exit;
+        }
+    }
     if($board->getActual_player() >= sizeof($all_players)){
     $board->setActual_player(0);
       $this->start_game();
-
       exit;
     };
     header("Location: /"); exit;
@@ -108,9 +120,9 @@ class PlayController{
     function win(){
       $board = $this->getBoard();
       $board->winGame();
-      //Tratitementd es mises à faire
+      
       $_SESSION["saved_game"] = $board->save();
-      var_dump($board);
+      
       header("Location: /"); exit;
     }
       function relaunch(){

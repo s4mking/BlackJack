@@ -1,0 +1,75 @@
+.container{
+    display:flex;
+}
+.form_controls{
+width:40%;
+}
+#userName{
+    width:50%;
+    margin-bottom:15px;
+}
+body .betInput{
+    width:10%;
+    margin-bottom:20px;
+}
+.display_user{
+margin-right:50px;
+}
+.container_game{
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+}
+.container_game div{
+    display:flex;
+}
+.croupier,
+.actual_player{
+    margin:20px 0;
+}
+.container .rule{
+    width:80%;
+    margin-right:10px;
+}
+.slidecontainer {
+    width: 100%; /* Width of the outside container */
+  }
+  
+  /* The slider itself */
+  .slider {
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    height: 15px;
+  border-radius: 5px;
+    width: 30%; /* Full-width */
+    height: 25px; /* Specified height */
+    background: #d3d3d3; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+  }
+  
+  /* Mouse-over effects */
+  .slider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+  }
+  
+  body {
+    background-color: #FFF !important;
+}
+body .table_result{
+  width:70%;
+}
+body .table_result tr td,
+body .table_result tr th{
+  text-align: center;
+}
+
+
+.player_turn{
+  color:red;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+}
