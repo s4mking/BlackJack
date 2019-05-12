@@ -49,20 +49,23 @@ namespace Models;
     public function addPlayer($name,$id =1){
       // if($this->status != "initial")
       // throw new Exception("Le jeu a déjà commencé!!!");
-      $list_players = $this->getPlayers();
+      $error = $this->getErrorName($name);
+      
+      if($error != true){
+        return $error;
+      }else{
+        $list_players = $this->getPlayers();
       if($id == 1){
         $id = sizeof($list_players);
       }
-
-      var_dump($list_players);
-      var_dump($id);
-      // die('here');
        $player = new  \Models\Player(
         $name,
         $id
       );
       $this->players[$player->name] = $player;      
       $this->setActual_player($this->actual_player + 1);
+      }
+      
     }
 
     public function deletePlayer($id){
@@ -173,52 +176,29 @@ namespace Models;
     $this->setStatus("initial"); 
   }
 
-  function getErrorName($errorType){
-    switch ($errorType) {
-      case noplayer:
-          return('Vous devez avoir au moins un joueur');
-          break;
-      case toomuchplayers:
-          return('Vous ne pouvez pas voir plus de 3 joueurs, chacun son tour');
-          break;
-      case nomise:
-          return('Vous devez avoir au moins une mise');
-          break;
-      default:
-          return('Y a rien');
+  //Gestion des erreurs en cours mais pas fini
+  function getErrorName($name){
+    if($name == " "){
+      return 'Vous devez avoir un vrai nom!!!';
+    }
+    else if(sizeof($this->getPlayers()) > 4){
+      return 'Vopus ne pouvez pas avoir plus de 4 joueurs!!!';
+    }
+    else{
+      return true;
     }
   }
 
-  function getErrorStart($errorType){
-    switch ($errorType) {
-      case noplayer:
-          return('Vous devez avoir au moins un joueur');
-          break;
-      case toomuchplayers:
-          return('Vous ne pouvez pas voir plus de 3 joueurs, chacun son tour');
-          break;
-      case nomise:
-          return('Vous devez avoir au moins une mise');
-          break;
-      default:
-          return('Y a rien');
-    }
+  function getErrorMise($mise,$playerId){
+    $monney = $this->getPlayerById($playerId)->getMoney();
+   if($mise > $monney){
+    return "Vous n'avez pas cet argent de disponible!!!";
+   }
+   else{
+    return true;
   }
-  function getErrorBets($errorType){
-    switch ($errorType) {
-      case noplayer:
-          return('Vous devez avoir au moins un joueur');
-          break;
-      case toomuchplayers:
-          return('Vous ne pouvez pas voir plus de 3 joueurs, chacun son tour');
-          break;
-      case nomise:
-          return('Vous devez avoir au moins une mise');
-          break;
-      default:
-          return('Y a rien');
-    }
   }
+
 
 
   }

@@ -20,11 +20,8 @@ class PlayController{
    
     }
     $list_player = $board->getPlayers();
-    // if(sizeof($list_player)>=3){
-    //   //  die('Too much players....');
-    // }else{
-      $name = $_POST["player_name"];
-    $board->addPlayer($name);
+    $name = $_POST["player_name"];
+    $result = $board->addPlayer($name);
     $_SESSION["saved_game"] = $board->save();
     header("Location: /"); exit;
     // }
