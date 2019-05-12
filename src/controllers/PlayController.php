@@ -14,6 +14,11 @@ class PlayController{
   }
   function new_player(){
     $board = $this->getBoard();
+    if($board->getPlayerByName('Croupier') == NULL){
+      $board->addPlayer("Croupier",0);
+      $listPlayers = $board->getPlayers();
+   
+    }
     $list_player = $board->getPlayers();
     // if(sizeof($list_player)>=3){
     //   //  die('Too much players....');
@@ -58,20 +63,8 @@ class PlayController{
     $actualPlayer->setMise($bet_num);
     $board->setActual_player($board->getActual_player() + 1);
     $_SESSION["saved_game"] = $board->save();
-    if($nextPlayer->name == 'Croupier'){
-      var_dump($board->getActual_player()+1 );
-      var_dump(sizeof($all_players));
-      if($board->getActual_player()+1 >= sizeof($all_players)){
-        $board->setActual_player($board->getActual_player() + 1);
-        }else{
-          $board->setActual_player(0);
-      $this->start_game();
-
-      exit;
-        }
-    }
-    if($board->getActual_player() >= sizeof($all_players)){
-    $board->setActual_player(0);
+    if($board->getActual_player() == sizeof($all_players)){
+    $board->setActual_player(1);
       $this->start_game();
       exit;
     };
@@ -83,10 +76,6 @@ class PlayController{
     $_SESSION['used_cards']=array();
     //Ici on va fournir les mains de départ + ajout de l'utilisateur croupier
     // var_dump($board);
-    if($board->getPlayerByName('Croupier') == NULL){
-      $board->addPlayer("Croupier");
-    }
-   
     
     $list_player = $board->getPlayers();
     

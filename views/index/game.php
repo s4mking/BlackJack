@@ -49,7 +49,7 @@ foreach($board->getPlayers() as $player){
 </div>
 <?php 
 var_dump($player->name);
-if( $board->getActual_player()+1 != sizeof($board->getPlayers())){
+if( $board->getActual_player() < sizeof($board->getPlayers())){
 ?>
 <div> 
 <form method="post" action="/?controller=play&action=drawcard">

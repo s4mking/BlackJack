@@ -7,7 +7,7 @@ namespace Models;
     private $players = [];
     private $actual_player=0;
 
-
+    
    function setStatus($status){
       $this->status = $status;
    }
@@ -17,11 +17,11 @@ namespace Models;
 
    public function start(){
     $this->status = "started";
-    $this->setActual_player(0);
+    $this->setActual_player(1);
   }
   public function bet(){
     $this->status = "bet";
-    $this->setActual_player(0);
+    $this->setActual_player(1);
   }
   
     public function getActual_player(){
@@ -46,13 +46,17 @@ namespace Models;
         }
       }
     }
-    public function addPlayer($name){
+    public function addPlayer($name,$id =1){
       // if($this->status != "initial")
       // throw new Exception("Le jeu a déjà commencé!!!");
       $list_players = $this->getPlayers();
-      $id = sizeof($list_players);
+      if($id == 1){
+        $id = sizeof($list_players);
+      }
+
       var_dump($list_players);
-      
+      var_dump($id);
+      // die('here');
        $player = new  \Models\Player(
         $name,
         $id
@@ -108,13 +112,10 @@ namespace Models;
 //on va test ter si c'est le casino ou pas
 
     function checkCasino(){
-      $next_id = ($this->actual_player);
-      $next_player = $this->getPlayerById($next_id);
+      $actual_id = ($this->actual_player);
       
-      if($next_player->name == 'Croupier'){
-        $casino = $this->getPlayerById($this->actual_player);
-        var_dump($this->actual_player);
-        
+      if($actual_id == sizeof($this->getPlayers())){
+        $casino = $this->getPlayerById(0);
           while($casino->calcCards() <= 16){
             $this->drawCard($casino);
           }
